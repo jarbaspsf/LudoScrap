@@ -1,6 +1,6 @@
 # LudoScrap
 
-One simple scrap built with python to list the prices and status of an auction on the Ludopedia site. 
+One simple scraper built with python to list the prices and status of an auction on the Ludopedia site. 
 
 ## Built With
 
