@@ -1,6 +1,22 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import re
 
+
+def findUrlsLeilao():
+    try:
+        html = urlopen('https://www.ludopedia.com.br/listas?v=leiloes')
+    except HTTPError as e:
+        print(e)
+        return None
+    try:
+        bsObj = BeautifulSoup(html.read(), "html.parser")
+        links = bsObj.findAll("a", {"class": "item-read"})
+        for link in links:
+            print("Link: "+link.attrs['href'])
+            findPrecosLeilao(link.attrs['href'])
+    except AttributeError as e:
+        return None
 
 def findPrecosLeilao(url):
     try:
@@ -23,4 +39,4 @@ def findPrecosLeilao(url):
     except AttributeError as e:
         return None
 
-findPrecosLeilao("")        
+findUrlsLeilao()        
