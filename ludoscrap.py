@@ -5,7 +5,6 @@ from models.boardgame import BoardGame
 from models.leilao import Leilao
 
 
-
 def findUrlsLeilao():
     try:
         html = urlopen('https://www.ludopedia.com.br/listas?v=leiloes')
@@ -33,15 +32,30 @@ def findUrlsLeilao():
 
 def findPrecosLeilao(url):
     try:
-        html = urlopen(url);
+        html = urlopen(url)
+        ler_html(html)
     except HTTPError as e:
         print(e)
         return None
+
+
+def ler_html(html, url = None):
     try:
         bsObj = BeautifulSoup(html.read(), "html.parser")
         print("Lendo dados de {} ...".format(url))
         # Criando o leilao
-        leilao = Leilao(bsObj.body.h3.get_text(), url)
+        titulo = bsObj.body.h3.get_text()
+
+        # Descricao do leilao
+        itens_descricao = bsObj.body.article.findAll("div", {"class": "text-leilao"})
+
+        data_fim_leilao = itens_descricao[0].span.get_text().split(",")[0]
+        hora_fim_leilao = itens_descricao[0].span.get_text().split(",")[1]
+        estado_origem = itens_descricao[1].span.get_text()
+        cidade = itens_descricao[2].span.get_text()
+        descricao = bsObj.body.article.find("div", {"id": "lista-descricao-html"}).get_text()
+
+        leilao = Leilao(titulo, url, descricao, data_fim_leilao, hora_fim_leilao, estado_origem, cidade)
 
         # Recuperando os itens do leilao
         itens = bsObj.findAll("div", {"class": "lista-item"})
@@ -57,6 +71,6 @@ def findPrecosLeilao(url):
         return None
 
 
-findUrlsLeilao()
+
 
 
