@@ -5,6 +5,7 @@ from models.boardgame import BoardGame
 from models.leilao import Leilao
 
 
+
 def findUrlsLeilao():
     try:
         html = urlopen('https://www.ludopedia.com.br/listas?v=leiloes')
@@ -14,6 +15,7 @@ def findUrlsLeilao():
     try:
         bsObj = BeautifulSoup(html.read(), "html.parser")
         links = bsObj.findAll("a", {"class": "item-read"})
+
         leiloes = []
         for link in links:
             leiloes.append(findPrecosLeilao(link.attrs['href']))
@@ -25,7 +27,6 @@ def findUrlsLeilao():
                 print("Board Game: {}".format(board_game.nome))
                 print("Preço: {}".format(board_game.preco))
                 print("Estado: {}".format(board_game.estado))
-
 
     except AttributeError as e:
         return None
@@ -57,3 +58,5 @@ def findPrecosLeilao(url):
 
 
 findUrlsLeilao()
+
+
